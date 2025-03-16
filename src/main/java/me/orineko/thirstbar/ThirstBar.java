@@ -27,6 +27,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.CampfireRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -119,6 +120,11 @@ public final class ThirstBar extends JavaPlugin {
             furnaceRecipe = new FurnaceRecipe(NamespacedKey.randomKey(), bottle, potionRawItem.getType(), ConfigData.CUSTOM_FURNACE_EXP, ConfigData.CUSTOM_FURNACE_COOKING_TIME);
         }
         Bukkit.addRecipe(furnaceRecipe);
+
+        // Add Campfire recipe too!
+        CampfireRecipe campfireRecipe;
+        campfireRecipe = new CampfireRecipe(NamespacedKey.randomKey(), bottle, potionRawItem.getType(), ConfigData.CUSTOM_FURNACE_EXP, ConfigData.CUSTOM_FURNACE_COOKING_TIME);
+        Bukkit.addRecipe(campfireRecipe);
     }
 
     @Override

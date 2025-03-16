@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -421,6 +422,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         ArmorStand armorStand = player.getWorld().spawn(location, ArmorStand.class);
         armorStand.setVisible(false);
         armorStand.setGravity(false);
+        armorStand.getAttribute(Attribute.BURNING_TIME).setBaseValue(0);
         setArmorStandFrontPlayer(armorStand);
     }
 

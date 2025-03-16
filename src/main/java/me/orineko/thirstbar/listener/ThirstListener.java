@@ -89,15 +89,19 @@ public class ThirstListener implements Listener {
         Player player = e.getPlayer();
         PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().getData(player.getName());
         if (playerData == null) return;
-        GameMode gameMode = e.getNewGameMode();
-        List<String> gamemodeList = ConfigData.DISABLED_GAMEMODE;
-        try {
-            playerData.setDisableAll(gamemodeList.stream()
-                    .anyMatch(g -> gameMode.equals(GameMode.valueOf(g.toUpperCase()))));
-        } catch (IllegalArgumentException ignore) {
+        if (ConfigData.DISABLED_WORLDS.stream().noneMatch(w ->
+                playerData.getPlayer().getWorld().getName().trim().equalsIgnoreCase(w.trim()))) // check if player is in disabled world
+        {
+            GameMode gameMode = e.getNewGameMode();
+            List<String> gamemodeList = ConfigData.DISABLED_GAMEMODE;
+            try {
+                playerData.setDisableAll(gamemodeList.stream()
+                        .anyMatch(g -> gameMode.equals(GameMode.valueOf(g.toUpperCase()))));
+            } catch (IllegalArgumentException ignore) {
 
+            }
+            playerData.updateAll(player);
         }
-        playerData.updateAll(player);
     }
 
     @EventHandler
@@ -426,7 +430,7 @@ public class ThirstListener implements Listener {
                         if (meta != null) {
                             meta.setDisplayName(ConfigData.NAME_RAW_POTION);
                             meta.setLore(ConfigData.LORE_RAW_POTION);
-                            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                            meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
                             itemBottle.setItemMeta(meta);
                         }
 
