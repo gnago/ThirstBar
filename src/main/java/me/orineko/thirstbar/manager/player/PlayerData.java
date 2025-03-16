@@ -261,6 +261,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         }
         if (!isEnableActionBar()) return;
         if (isDisableAll()) {
+            if (ConfigData.CUSTOM_ACTION_BAR_ENABLE) return;
             setTitleDisableActionBar(thirst, thirstMax, getReduceTotal(), thirstTime / 20.0);
         } else {
             if (stageCurrentList.size() > 0) {
