@@ -22,6 +22,8 @@ public class ConfigData {
     public static String CUSTOM_ACTION_BAR_ORIENTATION;
     public static float CUSTOM_FURNACE_EXP;
     public static int CUSTOM_FURNACE_COOKING_TIME;
+    public static float CUSTOM_CAMPFIRE_EXP;
+    public static int CUSTOM_CAMPFIRE_COOKING_TIME;
     public static double THIRSTY_MAX;
     public static double THIRSTY_REDUCE;
     public static long THIRSTY_TIME;
@@ -64,6 +66,9 @@ public class ConfigData {
         }
         CUSTOM_FURNACE_EXP = (float) configFile.getDouble("CustomFurnace.Exp", 0);
         CUSTOM_FURNACE_COOKING_TIME = configFile.getInt("CustomFurnace.CookingTime", 1);
+
+        CUSTOM_CAMPFIRE_EXP = (float) configFile.getDouble("CustomCampfire.Exp", 0);
+        CUSTOM_CAMPFIRE_COOKING_TIME = configFile.getInt("CustomCampfire.CookingTime", 1);
 
         STOP_DRINKING = configFile.getBoolean("StopDrinking", false);
         THIRSTY_MAX = Math.max(1, configFile.getDouble("Thirsty.Max", 1));

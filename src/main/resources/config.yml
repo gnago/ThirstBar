@@ -9,10 +9,13 @@ StopDrinking: true # Prevents players from drinking water when their thirst bar 
 CustomActionBar:
   Enable: false
   Orientation: LEFT_TO_RIGHT #LEFT_TO_RIGHT/RIGHT_TO_LEFT
-#CustomFurnace apply for 1.16 above
+#CustomFurnace apply for 1.16 above. Needs complete restart for changes to apply
 CustomFurnace:
   Exp: 10.0
   CookingTime: 10
+CustomCampfire:
+  Exp: 0.0
+  CookingTime: -1 #Set to -1 to disable campfire boiling
 Thirsty:
   Max: 100
   Reduce: 1
