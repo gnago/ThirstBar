@@ -334,7 +334,8 @@ public class ThirstListener implements Listener {
         if (stageRain != null) {
             if (stageRain.isEnable()) {
                 if (!delayClickMap.contains(player.getUniqueId())) {
-                    if (player.getWorld().hasStorm()) {
+                    Location plrLoc = player.getLocation();
+                    if (player.getWorld().hasStorm() && player.getWorld().getTemperature(plrLoc.getBlockX(), plrLoc.getBlockY(), plrLoc.getBlockZ()) <= 0.95) {
                         boolean check = false;
                         for (int i = player.getLocation().getBlockY() + 1; i < 320; i++) {
                             Block block = player.getWorld().getBlockAt(player.getLocation().getBlockX(), i, player.getLocation().getBlockZ());

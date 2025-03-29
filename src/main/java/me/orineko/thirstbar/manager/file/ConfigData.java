@@ -128,7 +128,7 @@ public class ConfigData {
         int numberOfItems = 20;
         List<String> stringList = new ArrayList<>();
 
-        String shiftRightChar = "                         ";
+        String shiftRightChar = convertUnicodeEscape("\\uEea0                    ");
         String waterChar = convertUnicodeEscape("\\u"+thirstChar);
         String waterHalfLeftChar = convertUnicodeEscape("\\u"+thirstHalfLeftChar);
         String waterHalfRightChar = convertUnicodeEscape("\\u"+thirstHalfRightChar);
