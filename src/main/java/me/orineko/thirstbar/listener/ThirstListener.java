@@ -14,6 +14,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -418,7 +419,11 @@ public class ThirstListener implements Listener {
         }
 
         if(player.getInventory().getItemInOffHand().getType().equals(Material.GLASS_BOTTLE)) {
-            e.setCancelled(true);
+            if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+                if (ThirstBarMethod.checkSightIsWater(player)) {
+                    e.setCancelled(true);
+                }
+            }
         } else {
             if (itemStack.getType().equals(Material.GLASS_BOTTLE)) {
                 if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
@@ -450,11 +455,36 @@ public class ThirstListener implements Listener {
                             ItemStack item = itemStack.clone();
                             item.setAmount(itemStack.getAmount() - 1);
                             player.getInventory().setItem(player.getInventory().getHeldItemSlot(), item);
-                            player.getInventory().addItem(itemBottle);
+                            if (player.getInventory().firstEmpty() == -1) // if player inventory is full
+                            {
+                                Location dropLoc = player.getLocation();
+                                dropLoc.setY(dropLoc.getY() + 1);
+                                Item itemDropped = player.getWorld().dropItemNaturally(dropLoc, itemBottle);
+                                itemDropped.setVelocity(player.getLocation().getDirection().multiply(0.2));
+                                itemDropped.setPickupDelay(40);
+                            }
+                            else
+                            {
+                                player.getInventory().addItem(itemBottle);
+                            }
                         }
-                    } else {
-                        e.setCancelled(true);
-                    }
+                    } /*else {
+                        if (e.getClickedBlock() != null)
+                        {
+                            e.getPlayer().sendMessage("Non null block: " + e.getClickedBlock().getType().name());
+                            if (e.getClickedBlock().getType().equals(Material.AIR) || e.getClickedBlock().isPassable())
+                            {
+                                //e.getPlayer().sendMessage("cancelled");
+                                //e.setCancelled(true);
+                            }
+                        }
+                        else
+                        {
+                            //e.getPlayer().sendMessage("Cancelled: clicked on null block");
+                            //e.setCancelled(true);
+                        }
+
+                    }*/
                 }
             }
         }

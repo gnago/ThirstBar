@@ -10,12 +10,12 @@ import me.orineko.thirstbar.manager.player.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import javax.annotation.Nonnull;
@@ -163,13 +163,14 @@ public class ThirstBarMethod {
         double x = vector.getX()/5;
         double y = vector.getY()/5;
         double z = vector.getZ()/5;
-//        player.sendMessage("test: "+loc+", "+vector);
-        int i = 0;
+        //player.sendMessage("test: "+loc+", "+vector);
         do {
-            i++;
             loc = loc.add(x, y, z);
             Block block = loc.getBlock();
-            if(block.getType().equals(Material.AIR)) continue;
+            BoundingBox box = block.getBoundingBox();
+            //if (box.contains(loc.getX(),loc.getY(),loc.getZ()))
+            //    player.sendMessage(block.getType().name() + "intersects at" + loc.toString());
+            if(!box.contains(loc.getX(),loc.getY(),loc.getZ()) && !block.getType().name().contains("WATER")) continue;
             return block.getType().name().contains("WATER");
         } while (locOrigin.distance(loc) < 4);
         return false;
