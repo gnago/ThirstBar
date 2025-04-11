@@ -269,7 +269,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
                 if (ConfigData.CUSTOM_ACTION_BAR_ENABLE) {
                     String text;
                     if (stage instanceof StageConfig) {
-                        text = ConfigData.getThirstCustomText(ConfigData.TypeResourceThirst.RAW_WATTER,
+                        text = ConfigData.getThirstCustomText(ConfigData.TypeResourceThirst.RAW_WATER,
                                 thirst, thirstMax, getReduceTotal(), thirstTime / 20.0);
                     } else {
                         text = ConfigData.getThirstCustomText(ConfigData.TypeResourceThirst.DEBUFF,

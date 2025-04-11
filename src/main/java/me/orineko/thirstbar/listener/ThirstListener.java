@@ -395,9 +395,14 @@ public class ThirstListener implements Listener {
                                         Bukkit.getScheduler().cancelTask(playerData.idDelayDisable);
                                         playerData.idDelayDisable = 0;
                                     }
-                                    playerData.disableStage(player, StageList.KeyConfig.WATER);
-                                    playerData.setStage(player, stageWater);
-                                    playerData.addThirst(stageWater.getValue());
+                                    if (ThirstBarMethod.checkSightIsWater(player, true))
+                                        playerData.addThirst(stageWater.getValue() * 2);
+                                    else
+                                    {
+                                        playerData.disableStage(player, StageList.KeyConfig.WATER);
+                                        playerData.setStage(player, stageWater);
+                                        playerData.addThirst(stageWater.getValue());
+                                    }
                                     if (playerData.getThirst() > playerData.getThirstMax())
                                         playerData.setThirst(playerData.getThirstMax());
                                     if (playerData.getThirst() < 0) playerData.setThirst(0);

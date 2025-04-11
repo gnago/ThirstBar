@@ -192,8 +192,6 @@ public class ThirstBarMethod {
             Location belowBlock = block.getLocation();
             belowBlock.subtract(0, 1, 0);
             Block blockBelow = belowBlock.getBlock();
-            for (Player p : block.getWorld().getPlayers())
-                p.sendMessage(blockBelow.getType().name());
             if ((blockBelow.getType().name().contains("FIRE") && !blockBelow.getType().name().contains("FIRE_CORAL")) || blockBelow.getType().name().contains("LAVA"))
                 return true;
         }
