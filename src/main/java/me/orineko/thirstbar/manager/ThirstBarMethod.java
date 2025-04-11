@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -156,7 +157,7 @@ public class ThirstBarMethod {
         });
     }
 
-    public static boolean checkSightIsWater(@Nonnull Player player){
+    public static boolean checkSightIsWater(@Nonnull Player player, boolean checkIfClean){
         Location locOrigin = player.getLocation();
         Location loc = player.getLocation().clone().add(0, 1.5, 0);
         Vector vector = player.getLocation().getDirection();
@@ -170,9 +171,45 @@ public class ThirstBarMethod {
             BoundingBox box = block.getBoundingBox();
             //if (box.contains(loc.getX(),loc.getY(),loc.getZ()))
             //    player.sendMessage(block.getType().name() + "intersects at" + loc.toString());
-            if(!box.contains(loc.getX(),loc.getY(),loc.getZ()) && !block.getType().name().contains("WATER")) continue;
-            return block.getType().name().contains("WATER");
+
+            // skip if current block is not blocking line of sight and is not water
+            if (!box.contains(loc.getX(),loc.getY(),loc.getZ()) && !checkIsWaterBlock(block))
+                continue;
+            // if hit solid (line of sight break) or water block
+            if (checkIfClean)
+                return checkBlockIsCleanWater(block);
+            else
+                return checkIsWaterBlock(block);
         } while (locOrigin.distance(loc) < 4);
+        return false;
+    }
+
+    public static boolean checkBlockIsCleanWater(Block block) {
+        if (checkIsWaterBlock(block))
+        {
+            /*if (block.getType().equals(Material.BUBBLE_COLUMN))
+                return true;*/
+            Location belowBlock = block.getLocation();
+            belowBlock.subtract(0, 1, 0);
+            Block blockBelow = belowBlock.getBlock();
+            for (Player p : block.getWorld().getPlayers())
+                p.sendMessage(blockBelow.getType().name());
+            if ((blockBelow.getType().name().contains("FIRE") && !blockBelow.getType().name().contains("FIRE_CORAL")) || blockBelow.getType().name().contains("LAVA"))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean checkIsWaterBlock(Block block) {
+        return block.getType().name().contains("WATER") || checkIsWaterlogged(block);
+    }
+
+    public static boolean checkIsWaterlogged(Block block) {
+        if (block.getBlockData() instanceof Waterlogged)
+        {
+            Waterlogged wlb = (Waterlogged) block.getBlockData();
+            return wlb.isWaterlogged();
+        }
         return false;
     }
 
