@@ -1,8 +1,6 @@
 package me.orineko.thirstbar.manager.player;
 
 import com.cryptomorin.xseries.messages.ActionBar;
-import lombok.Getter;
-import lombok.Setter;
 import me.orineko.thirstbar.ThirstBar;
 import me.orineko.thirstbar.manager.ThirstBarMethod;
 import me.orineko.thirstbar.manager.action.ActionRegister;
@@ -29,30 +27,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Getter
 public class PlayerData extends PlayerSetting implements PlayerThirstValue, PlayerThirstyDisplay, PlayerThirstScheduler {
 
     private final String name;
-    @Setter
     private double thirst;
-    @Setter
     private double thirstMax;
-    @Setter
     private double thirstReduce;
-    @Setter
     private double thirstReduceOrigin;
     private long thirstTime;
-    @Setter
     private double thirstDamage;
     private long cooldownRefresh;
     @Nullable
-    @Setter
     private ArmorStand armorStandFrontPlayer;
-    @Setter
     private boolean armorStandBehindPlayer;
 
     private final List<Stage> stageCurrentList;
     private final List<ActionRegister> actionRegisterList;
+    private final List<String> executingActions;
 
     private long delayRefresh;
     private int idRepeating;
@@ -77,6 +68,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         this.delayRefresh = 0;
         this.stageCurrentList = new ArrayList<>();
         this.actionRegisterList = new ArrayList<>();
+        this.executingActions = new ArrayList<>();
         executeReduce();
         Player player = getPlayer();
         if (player != null) {
@@ -88,14 +80,34 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         setThirst(getThirstMax());
     }
 
+
     @Override
     public long getCooldownRefresh() {
         return cooldownRefresh;
     }
-
     @Override
     public void setCooldownRefresh(long value) {
         this.cooldownRefresh = value;
+    }
+
+    @Nullable
+    public ArmorStand getArmorStandFrontPlayer() { return armorStandFrontPlayer; }
+    public void setArmorStandFrontPlayer(@Nullable ArmorStand armorStand) { armorStandFrontPlayer = armorStand; }
+    public boolean isArmorStandBehindPlayer() { return armorStandBehindPlayer; }
+    public void setArmorStandBehindPlayer(boolean behindPlayer) { armorStandBehindPlayer = behindPlayer; }
+    public List<Stage> getStageCurrentList() { return stageCurrentList; }
+    public List<ActionRegister> getActionRegisterList() { return actionRegisterList; }
+
+    public void setActionExecutingStatus(String actionName, boolean isExecuting)
+    {
+        if (isExecuting && !executingActions.contains(actionName))
+            executingActions.add(actionName);
+        else if (!isExecuting)
+            executingActions.remove(actionName);
+    }
+    public boolean isExecutingAction(String actionName)
+    {
+        return executingActions.contains(actionName);
     }
 
     @Override
@@ -197,12 +209,38 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         if (this.thirst < 0) this.thirst = 0;
     }
 
+    @Override
+    public void setThirst(double value) { thirst = value; }
+
+    @Override
+    public double getThirst() { return thirst; }
+
+    @Override
+    public void setThirstMax(double value) { thirstMax = value; }
+
+    @Override
+    public double getThirstMax() { return thirstMax; }
+
+    @Override
+    public void setThirstReduce(double value) { thirstReduce = value; }
+
+    @Override
+    public double getThirstReduce() { return thirstReduce; }
 
     @Override
     public void setThirstTime(long value) {
         thirstTime = value;
         executeReduce();
     }
+
+    @Override
+    public long getThirstTime() { return thirstTime; }
+
+    @Override
+    public void setThirstDamage(double value) { thirstDamage = value; }
+
+    @Override
+    public double getThirstDamage() { return thirstDamage; }
 
     @Override
     public void showBossBar(@Nonnull Player player) {
@@ -217,7 +255,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
             return;
         } else showBossBar(player);
         if (!isEnableBossBar()) return;
-        if (stageCurrentList.size() > 0) {
+        if (!stageCurrentList.isEmpty()) {
             Stage stage = stageCurrentList.get(stageCurrentList.size() - 1);
             if (stage.getTitleBossBar() != null && !stage.getTitleBossBar().isEmpty())
                 setTitleBossBar(stage.getTitleBossBar(), thirst, thirstMax, getReduceTotal(), thirstTime / 20.0);
@@ -264,7 +302,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
             if (ConfigData.CUSTOM_ACTION_BAR_ENABLE) return;
             setTitleDisableActionBar(thirst, thirstMax, getReduceTotal(), thirstTime / 20.0);
         } else {
-            if (stageCurrentList.size() > 0) {
+            if (!stageCurrentList.isEmpty()) {
                 Stage stage = stageCurrentList.get(stageCurrentList.size() - 1);
                 if (ConfigData.CUSTOM_ACTION_BAR_ENABLE) {
                     String text;
@@ -426,5 +464,4 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         armorStand.getAttribute(Attribute.BURNING_TIME).setBaseValue(0);
         setArmorStandFrontPlayer(armorStand);
     }
-
 }

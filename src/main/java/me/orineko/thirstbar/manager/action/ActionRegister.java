@@ -19,7 +19,6 @@ public abstract class ActionRegister {
     private boolean enable;
     private double multiple;
     private boolean hideActionBar;
-    private boolean executing;
     private int idRepeat;
     private final List<Condition> conditionList;
 
@@ -60,12 +59,9 @@ public abstract class ActionRegister {
         this.hideActionBar = hideActionBar;
     }
 
-    public boolean isExecuting() {
-        return executing;
-    }
-
-    public void setExecuting(boolean executing) {
-        this.executing = executing;
+    public boolean isExecuting(@Nonnull Player player) {
+        PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().addData(player.getName());
+        return playerData.isExecutingAction(name);
     }
 
     public abstract boolean checkCondition(@Nonnull Player player);
@@ -109,11 +105,11 @@ public abstract class ActionRegister {
     }
 
     public boolean checkCanExecute(@Nonnull Player player){
-        return isEnable() && !isExecuting() && checkCondition(player);
+        return isEnable() && !isExecuting(player) && checkCondition(player);
     }
 
     public boolean checkCanNotExecute(@Nonnull Player player){
-        return isEnable() && isExecuting() && !checkCondition(player);
+        return isEnable() && isExecuting(player) && !checkCondition(player);
     }
 
     public void executeAction(@Nonnull Player player){
@@ -122,7 +118,7 @@ public abstract class ActionRegister {
         playerData.getActionRegisterList().add(this);
         if(isHideActionBar()) playerData.setEnableActionBar(false);
         playerData.updateAll(player);
-        setExecuting(true);
+        playerData.setActionExecutingStatus(name, true);
     }
 
     public void disableAction(@Nonnull Player player){
@@ -130,7 +126,7 @@ public abstract class ActionRegister {
         playerData.getActionRegisterList().remove(this);
         if(isHideActionBar()) playerData.setEnableActionBar(true);
         playerData.updateAll(player);
-        setExecuting(false);
+        playerData.setActionExecutingStatus(name, false);
     }
 
     @Nullable

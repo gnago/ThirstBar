@@ -317,7 +317,7 @@ public class MainCommand extends CommandManager {
 
     @CommandSub(length = 4, command = {"thirstbar", "tb"}, names = {"item", "save"}, justPlayerUseCmd = true, permissions = "thirstbar.item.save")
     public void onItemSave(Player player, String[] args) {
-        ItemStack item = player.getItemInHand();
+        ItemStack item = player.getInventory().getItemInMainHand();
         if (checkObjectIsFalse(!item.getType().equals(Material.AIR), player, MessageData.ERROR_NEED_ITEM_IN_HAND))
             return;
         String name = args[2];

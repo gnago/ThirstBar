@@ -1,7 +1,6 @@
 package me.orineko.thirstbar;
 
 import de.tr7zw.nbtapi.NBT;
-import lombok.Getter;
 import me.orineko.pluginspigottools.FileManager;
 import me.orineko.pluginspigottools.MethodDefault;
 import me.orineko.thirstbar.command.CommandManager;
@@ -21,10 +20,8 @@ import me.orineko.thirstbar.manager.player.PlayerData;
 import me.orineko.thirstbar.manager.player.PlayerDataList;
 import me.orineko.thirstbar.manager.stage.StageList;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.CampfireRecipe;
@@ -32,7 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 import javax.annotation.Nullable;
@@ -40,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
 public final class ThirstBar extends JavaPlugin {
 
     private static ThirstBar plugin;
@@ -108,8 +103,8 @@ public final class ThirstBar extends JavaPlugin {
         ItemStack bottle = new ItemStack(Material.POTION, 1);
         ItemMeta meta = bottle.getItemMeta();
         PotionMeta pmeta = (PotionMeta) meta;
-        PotionData pdata = new PotionData(PotionType.WATER);
-        if(pmeta != null) pmeta.setBasePotionData(pdata);
+        PotionType pdata = PotionType.WATER;
+        if(pmeta != null) pmeta.setBasePotionType(pdata);
         bottle.setItemMeta(meta);
         ItemStack potionRawItem = MethodDefault.getItemAllVersion("POTION");
         FurnaceRecipe furnaceRecipe;
@@ -215,6 +210,19 @@ public final class ThirstBar extends JavaPlugin {
             }
         });
     }
+
+    public PlayerDataList getPlayerDataList() { return playerDataList; }
+    public StageList getStageList() { return stageList; }
+    public ItemDataList getItemDataList() { return itemDataList; }
+    public FileManager getItemsFile() { return itemsFile; }
+    public FileManager getMessageFile() { return messageFile; }
+    public FileManager getPlayersFile() { return playersFile; }
+    public FileManager getStageFile() { return stageFile; }
+    public FileManager getActionsFile() { return actionsFile; }
+    public SqlManager getSqlManager() { return sqlManager; }
+    public boolean isWorldGuardApiEnable() { return worldGuardApiEnable; }
+    @Nullable
+    public PlaceholderAPI getPlaceholderAPI() { return placeholderAPI; }
 
     public static ThirstBar getInstance() {
         return plugin;
