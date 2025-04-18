@@ -9,10 +9,7 @@ import me.orineko.thirstbar.manager.file.ConfigData;
 import me.orineko.thirstbar.manager.stage.Stage;
 import me.orineko.thirstbar.manager.stage.StageConfig;
 import me.orineko.thirstbar.manager.stage.StageList;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -145,9 +142,28 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
                     player.getGameMode().equals(GameMode.SPECTATOR)) return;
             if (thirst <= 0) {
                 setThirst(0);
-                if (player.getHealth() - thirstDamage < 0) player.setHealth(0);
-                else player.setHealth(player.getHealth() - thirstDamage);
-                player.damage(0.000000000001);
+
+                // Thirst damage will mimic hunger damage
+                int healthLowerLimit;
+                switch (player.getWorld().getDifficulty()) {
+                    case PEACEFUL:
+                        healthLowerLimit = 20;
+                        break;
+                    case EASY:
+                        healthLowerLimit = 10;
+                        break;
+                    case NORMAL:
+                        healthLowerLimit = 1;
+                        break;
+                    default: //Hard
+                        healthLowerLimit = 0;
+                        break;
+                }
+                if (player.getHealth() != healthLowerLimit) {
+                    if (player.getHealth() - thirstDamage < healthLowerLimit) player.setHealth(healthLowerLimit);
+                    else player.setHealth(player.getHealth() - thirstDamage);
+                    player.damage(0.000000000001);
+                }
             }
         }, 0, 30);
     }

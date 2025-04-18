@@ -40,6 +40,6 @@ public class ActionUnderWater extends ActionRegister{
         int y = location.getBlockY()+1;
         int z = location.getBlockZ();
         Block block = world.getBlockAt(x, y, z);
-        return block.getType().name().contains("WATER");
+        return block.getType().name().contains("WATER") || player.getRemainingAir() < player.getMaximumAir();
     }
 }
