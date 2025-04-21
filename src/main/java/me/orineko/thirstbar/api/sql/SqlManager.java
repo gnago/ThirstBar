@@ -5,10 +5,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -75,7 +75,7 @@ public class SqlManager {
         return executeUpdate("DELETE FROM player");
     }
 
-    public double runGetThirstCurrentPlayer(@Nonnull String name){
+    public double runGetThirstCurrentPlayer(@NotNull String name){
         List<HashMap<String, Object>> list = executeQuery("SELECT * FROM player WHERE name = ?", name);
         if(list == null || list.isEmpty()) return -1;
         HashMap<String, Object> map = list.stream().filter(v -> v.getOrDefault("thirst", null) != null).findAny().orElse(null);
@@ -83,7 +83,7 @@ public class SqlManager {
         return (double) map.getOrDefault("thirst", -1);
     }
 
-    public int runSetDisablePlayer(@Nonnull String name, int disable){
+    public int runSetDisablePlayer(@NotNull String name, int disable){
         String sql = "INSERT INTO player (name, disable, thirst, max) " +
                 "VALUES (?, ?, 0, 0) " +
                 "ON DUPLICATE KEY UPDATE disable = VALUES(disable)";
@@ -91,7 +91,7 @@ public class SqlManager {
         return executeUpdate(sql, name, disable);
     }
 
-    public int runSetThirstPlayer(@Nonnull String name, double thirst){
+    public int runSetThirstPlayer(@NotNull String name, double thirst){
         String sql = "INSERT INTO player (name, disable, thirst, max) " +
                 "VALUES (?, 0, ?, 0) " +
                 "ON DUPLICATE KEY UPDATE thirst = VALUES(thirst)";
@@ -99,7 +99,7 @@ public class SqlManager {
         return executeUpdate(sql, name, thirst);
     }
 
-    public int runSetMaxPlayer(@Nonnull String name, double max){
+    public int runSetMaxPlayer(@NotNull String name, double max){
         String sql = "INSERT INTO player (name, disable, thirst, max) " +
                 "VALUES (?, 0, 0, ?) " +
                 "ON DUPLICATE KEY UPDATE max = VALUES(max)";
@@ -107,7 +107,7 @@ public class SqlManager {
         return executeUpdate(sql, name, max);
     }
 
-    public int runAddItems(@Nonnull String name, @Nonnull ItemStack itemStack, double value, double valuePercent) {
+    public int runAddItems(@NotNull String name, @NotNull ItemStack itemStack, double value, double valuePercent) {
         String serializedItem = ItemSerialization.itemStackArrayToBase64(new ItemStack[]{itemStack});
 
         String sql = "INSERT INTO items (name, item, value, value_percent) " +
@@ -130,7 +130,7 @@ public class SqlManager {
             statement.close();
             return row;
         } catch (SQLException e){
-            e.printStackTrace();
+            ThirstBar.getInstance().getLogger().severe(e.getMessage());
         }
         return -1;
     }
@@ -145,7 +145,7 @@ public class SqlManager {
             statement.close();
             return check;
         } catch (SQLException e){
-            e.printStackTrace();
+            ThirstBar.getInstance().getLogger().severe(e.getMessage());
         }
         return false;
     }
@@ -175,7 +175,7 @@ public class SqlManager {
             resultSet.close();
             return resultList;
         } catch (SQLException e){
-            e.printStackTrace();
+            ThirstBar.getInstance().getLogger().severe(e.getMessage());
         }
         return null;
     }
@@ -205,7 +205,7 @@ public class SqlManager {
                 dataOutput.close();
                 return Base64Coder.encodeLines(outputStream.toByteArray());
             } catch (Exception e) {
-                e.printStackTrace();
+                ThirstBar.getInstance().getLogger().severe(e.getMessage());
             }
             return null;
         }
@@ -225,7 +225,7 @@ public class SqlManager {
                 dataInput.close();
                 return items;
             } catch (ClassNotFoundException | IOException e) {
-                e.printStackTrace();
+                ThirstBar.getInstance().getLogger().severe(e.getMessage());
             }
             return null;
         }

@@ -16,9 +16,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
 
 @CommandManager.CommandInfo(aliases = {"ThirstBar", "TB", "Refresh", "RefreshAll"}, permissions = {"thirstbar.admin"})
 public class MainCommand extends CommandManager {
-    public MainCommand(@Nonnull Plugin plugin) {
+    public MainCommand(@NotNull Plugin plugin) {
         super(plugin);
     }
 
     @Nullable
     @Override
-    public List<String> executeTabCompleter(@Nonnull CommandSender sender, @Nonnull String label, @Nonnull String[] args) {
+    public List<String> executeTabCompleter(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (checkEqualArgs(args, 0, "item")) {
             if (checkEqualArgs(args, 1, "save", "give")) {
                 if (args.length == 3) return ThirstBar.getInstance().getItemDataList().getDataList()
@@ -423,7 +423,7 @@ public class MainCommand extends CommandManager {
         });
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected String getErrorCommandMessage() {
         return MessageData.ERROR_COMMAND;

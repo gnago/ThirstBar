@@ -6,8 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerSetting {
 
@@ -58,22 +57,22 @@ public class PlayerSetting {
         if(!enableActionBar) setTitleActionBar("");
     }
 
-    public void setColorBossBar(@Nonnull BarColor colorBossBar) {
+    public void setColorBossBar(@NotNull BarColor colorBossBar) {
         this.colorBossBar = colorBossBar;
         bossBar.setColor(colorBossBar);
     }
 
-    public void setStyleBossBar(@Nonnull BarStyle styleBossBar) {
+    public void setStyleBossBar(@NotNull BarStyle styleBossBar) {
         this.styleBossBar = styleBossBar;
         bossBar.setStyle(styleBossBar);
     }
 
-    public void setTitleBossBar(@Nonnull String titleBossBar) {
+    public void setTitleBossBar(@NotNull String titleBossBar) {
         this.titleBossBar = titleBossBar;
         bossBar.setTitle(titleBossBar);
     }
 
-    public void setTitleActionBar(@Nonnull String titleActionBar) {
+    public void setTitleActionBar(@NotNull String titleActionBar) {
         this.titleActionBar = titleActionBar;
     }
 
@@ -85,7 +84,7 @@ public class PlayerSetting {
         setTitleBossBar(ConfigData.BOSS_BAR_DISABLE_TEXT(value, max, reduce, time));
     }
 
-    public void setTitleBossBar(@Nonnull String text, double value, double max, double reduce, double time) {
+    public void setTitleBossBar(@NotNull String text, double value, double max, double reduce, double time) {
         setTitleBossBar(MethodDefault.formatColor(ConfigData.replace(text, value, max, reduce, time)));
     }
 
@@ -97,7 +96,7 @@ public class PlayerSetting {
         setTitleActionBar(ConfigData.ACTION_BAR_DISABLE_TEXT(value, max, reduce, time));
     }
 
-    public void setTitleActionBar(@Nonnull String text, double value, double max, double reduce, double time) {
+    public void setTitleActionBar(@NotNull String text, double value, double max, double reduce, double time) {
         setTitleActionBar(MethodDefault.formatColor(ConfigData.replace(text, value, max, reduce, time)));
     }
 

@@ -14,11 +14,11 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.joml.RoundingMode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +52,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
     private int idRepeatActionBar;
     private int idRepeat2ActionBar;
 
-    public PlayerData(@Nonnull String name) {
+    public PlayerData(@NotNull String name) {
         super();
         this.name = name;
         this.thirstMax = ConfigData.THIRSTY_MAX;
@@ -259,12 +259,12 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
     public double getThirstDamage() { return thirstDamage; }
 
     @Override
-    public void showBossBar(@Nonnull Player player) {
+    public void showBossBar(@NotNull Player player) {
         setDisplayBossBar(isEnableBossBar(), player);
     }
 
     @Override
-    public void updateBossBar(@Nonnull Player player) {
+    public void updateBossBar(@NotNull Player player) {
         if (isDisableAll()) {
             //setDisplayBossBar(false, player);
             setTitleDisableBossBar(thirst, thirstMax, getReduceTotal(), thirstTime / 20.0);
@@ -286,12 +286,12 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
     }
 
     @Override
-    public void updateFood(@Nonnull Player player) {
+    public void updateFood(@NotNull Player player) {
         if (isDisableAll() || isDisable() || !isEnableFood()) return;
         BigDecimal a = BigDecimal.valueOf(thirst);
         BigDecimal b = BigDecimal.valueOf(20);
         BigDecimal c = BigDecimal.valueOf(thirstMax);
-        BigDecimal d = a.multiply(b).divide(c, 2, RoundingMode.HALF_DOWN);
+        BigDecimal d = a.multiply(b).divide(c, 2, RoundingMode.HALF_UP);
         int value = d.intValue();
         if (value == 0 && thirst > 0)
             player.setFoodLevel(1);
@@ -300,7 +300,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
     }
 
     @Override
-    public void updateActionBar(@Nonnull Player player) {
+    public void updateActionBar(@NotNull Player player) {
         if (idDelayActionBar != 0) {
             Bukkit.getScheduler().cancelTask(idDelayActionBar);
             idDelayActionBar = 0;
@@ -365,7 +365,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
     }
 
     @Override
-    public void setDisplayBossBar(boolean bool, @Nonnull Player player) {
+    public void setDisplayBossBar(boolean bool, @NotNull Player player) {
         boolean hasBossBar = bossBar.getPlayers().stream().anyMatch(p -> p.getName().equals(name));
         if (bool && !hasBossBar) {
             bossBar.addPlayer(player);
@@ -384,7 +384,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         }
     }
 
-    public void disableStage(@Nonnull Player player, StageList.KeyConfig keyConfig) {
+    public void disableStage(@NotNull Player player, StageList.KeyConfig keyConfig) {
         Stage stage;
         if (keyConfig != null) stage = this.stageCurrentList.stream()
                 .filter(s -> s.getName().equals(keyConfig.getName())).findAny().orElse(null);
@@ -396,13 +396,13 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         this.stageCurrentList.remove(stage);
     }
 
-    public void setStage(@Nonnull Player player, @Nonnull Stage stage) {
+    public void setStage(@NotNull Player player, @NotNull Stage stage) {
         this.stageCurrentList.add(stage);
         stage.getPotionEffectList().forEach(player::addPotionEffect);
         ThirstBarMethod.executeAction(player, stage.getActionList(), stage instanceof StageConfig);
     }
 
-    public void checkAndAddEffect(@Nonnull Player player) {
+    public void checkAndAddEffect(@NotNull Player player) {
         if (stageCurrentList.isEmpty()) return;
         if (isDisableAll()) {
             stageCurrentList.forEach(s -> s.getPotionEffectList().forEach(p -> player.removePotionEffect(p.getType())));
@@ -437,7 +437,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         });
     }
 
-    public void executeStage(@Nonnull Player player) {
+    public void executeStage(@NotNull Player player) {
         if (isDisableAll()) return;
         Stage stage = ThirstBar.getInstance().getStageList().getStageTimelineList().stream()
                 .filter(s -> s.getThirstMin() <= thirst && thirst <= s.getThirstMax())
@@ -470,14 +470,14 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         return thirstReduce;
     }
 
-    public void createArmorStand(@Nonnull Player player){
+    public void createArmorStand(@NotNull Player player){
         if(getArmorStandFrontPlayer()!= null) return;
         Location location = new Location(player.getWorld(), 0, 255, 0);
         if(!location.getChunk().isLoaded()) location.getChunk().load();
         ArmorStand armorStand = player.getWorld().spawn(location, ArmorStand.class);
         armorStand.setVisible(false);
         armorStand.setGravity(false);
-        armorStand.getAttribute(Attribute.BURNING_TIME).setBaseValue(0);
+        Objects.requireNonNull(armorStand.getAttribute(Attribute.BURNING_TIME)).setBaseValue(0);
         setArmorStandFrontPlayer(armorStand);
     }
 }

@@ -1,14 +1,15 @@
 package me.orineko.thirstbar.command;
 
+import me.orineko.thirstbar.ThirstBar;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -30,7 +31,7 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
     private CommandMap commandMap;
     private final Set<String> labelTempList = new HashSet<>();
 
-    public CommandManager(@Nonnull Plugin plugin) {
+    public CommandManager(@NotNull Plugin plugin) {
         super(plugin.getName(), "", "/"+plugin.getName(), Collections.emptyList());
         commandInfo = getClass().getAnnotation(CommandInfo.class);
         this.setAliases(Arrays.asList(commandInfo.aliases()));
@@ -74,17 +75,17 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         return execute(sender, label, args);
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         return tabComplete(sender, label, args);
     }
 
     @Override
-    public boolean execute(@Nonnull CommandSender sender, @Nonnull String label, @Nonnull String[] args) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         String errorCommandMessage = getErrorCommandMessage();
         String errorPermissionMessage = getErrorPermissionMessage();
         String justPlayerCanUseMessage = getJustPlayerCanUseMessage();
@@ -117,8 +118,8 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
     }
 
     @Override
-    @Nonnull
-    public List<String> tabComplete(@Nonnull CommandSender sender, @Nonnull String label, @Nonnull String[] args) throws IllegalArgumentException {
+    @NotNull
+    public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) throws IllegalArgumentException {
         List<String> list = executeTabCompleter(sender, label, args);
         if (list == null) {
             String[] cmdArr = label.split(":");
@@ -156,17 +157,17 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
     }
 
     @Nullable
-    public abstract List<String> executeTabCompleter(@Nonnull CommandSender sender, @Nonnull String label, @Nonnull String[] args);
+    public abstract List<String> executeTabCompleter(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args);
 
-    private List<DataCommand> getDataCommandListInLength(@Nonnull String[] args) {
+    private List<DataCommand> getDataCommandListInLength(@NotNull String[] args) {
         return dataCommandList.stream().filter(d -> d.getLength() == args.length ||
-                        (d.getNameList().size() > 0 && args.length > 0 && d.getNameList().get(0).equalsIgnoreCase(args[0])) ||
+                        (!d.getNameList().isEmpty() && args.length > 0 && d.getNameList().get(0).equalsIgnoreCase(args[0])) ||
                 (d.getLength() < args.length && d.getNameList().isEmpty())
         ).collect(Collectors.toList());
     }
 
     @Nullable
-    private DataCommand getDataCommand(@Nonnull String label, @Nonnull String[] args) {
+    private DataCommand getDataCommand(@NotNull String label, @NotNull String[] args) {
         List<DataCommand> dataCommandList = getDataCommandListInLength(args);
         if (dataCommandList.isEmpty()) return null;
         String[] labelArr = label.split(":");
@@ -183,7 +184,7 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
         }).findAny().orElse(null);
     }
 
-    private boolean getPlayerHasPermission(@Nonnull DataCommand dataCommand, @Nonnull CommandSender sender, @Nonnull String[] args) {
+    private boolean getPlayerHasPermission(@NotNull DataCommand dataCommand, @NotNull CommandSender sender, @NotNull String[] args) {
         if (sender instanceof Player) {
             if (sender.isOp()) return true;
             if (dataCommand.getPermissionList().isEmpty()) return true;
@@ -192,49 +193,49 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
         return true;
     }
 
-    public void sendMessageSender(@Nonnull CommandSender sender, @Nullable String text) {
+    public void sendMessageSender(@NotNull CommandSender sender, @Nullable String text) {
         if (text == null || text.isEmpty()) return;
         sender.sendMessage(text);
     }
 
-    protected boolean checkObjectIsNull(Object object, @Nonnull CommandSender sender, @Nonnull String message) {
+    protected boolean checkObjectIsNull(Object object, @NotNull CommandSender sender, @NotNull String message) {
         if (object != null) return false;
         sender.sendMessage(message);
         return true;
     }
 
-    protected boolean checkObjectIsFalse(Boolean bool, @Nonnull CommandSender sender, @Nonnull String message) {
+    protected boolean checkObjectIsFalse(Boolean bool, @NotNull CommandSender sender, @NotNull String message) {
         if (bool) return false;
         sender.sendMessage(message);
         return true;
     }
 
-    protected boolean checkLackOfLength(@Nonnull String[] args, int length, @Nonnull CommandSender sender, @Nonnull String message) {
+    protected boolean checkLackOfLength(@NotNull String[] args, int length, @NotNull CommandSender sender, @NotNull String message) {
         if (args.length >= length) return false;
         sender.sendMessage(message);
         return true;
     }
 
     @Nullable
-    protected Player findPlayerOnline(@Nonnull String player, @Nonnull CommandSender sender, @Nonnull String message) {
+    protected Player findPlayerOnline(@NotNull String player, @NotNull CommandSender sender, @NotNull String message) {
         Player p = Bukkit.getOnlinePlayers().stream().filter(pl -> pl.getName().equals(player)).findAny().orElse(null);
         if (p != null) return p;
         sender.sendMessage(message);
         return null;
     }
 
-    protected void sendMessageSenderPlayer(@Nonnull CommandSender sender, @Nonnull Player player, @Nonnull String text) {
+    protected void sendMessageSenderPlayer(@NotNull CommandSender sender, @NotNull Player player, @NotNull String text) {
         if (!(sender instanceof Player) || !sender.getName().equals(player.getName())) sender.sendMessage(text);
         player.sendMessage(text);
     }
 
-    protected boolean checkEqualArgs(@Nonnull String[] args, int indicate, @Nonnull String... cmdList) {
+    protected boolean checkEqualArgs(@NotNull String[] args, int indicate, @NotNull String... cmdList) {
         if (indicate >= args.length) return false;
         String cmd = args[indicate].toUpperCase();
         return Arrays.stream(cmdList).map(String::toUpperCase).anyMatch((c) -> c.equals(cmd));
     }
 
-    @Nonnull
+    @NotNull
     protected abstract String getErrorCommandMessage();
 
     @Nullable
@@ -286,7 +287,7 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
         private final Method method;
         private boolean justPlayerUseCmd;
 
-        public DataCommand(int length, @Nonnull Method method) {
+        public DataCommand(int length, @NotNull Method method) {
             this.length = length;
             this.method = method;
             this.commandList = new ArrayList<>();
@@ -338,19 +339,19 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
             permissionList.addAll(Arrays.stream(permissions).collect(Collectors.toList()));
         }
 
-        public void callMethod(@Nonnull CommandManager commandManager, @Nonnull CommandSender sender, @Nonnull String[] args) {
+        public void callMethod(@NotNull CommandManager commandManager, @NotNull CommandSender sender, @NotNull String[] args) {
             try {
                 method.invoke(commandManager, sender, args);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
+                ThirstBar.getInstance().getLogger().severe(e.getMessage());
             }
         }
 
-        public void callMethod(@Nonnull CommandManager commandManager, @Nonnull Player player, @Nonnull String[] args) {
+        public void callMethod(@NotNull CommandManager commandManager, @NotNull Player player, @NotNull String[] args) {
             try {
                 method.invoke(commandManager, player, args);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
+                ThirstBar.getInstance().getLogger().severe(e.getMessage());
             }
         }
     }
@@ -362,7 +363,7 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
         private String[] cmdBefore;
         private String[] permission;
 
-        public CommandTabComplete(int indice, @Nonnull String cmd) {
+        public CommandTabComplete(int indice, @NotNull String cmd) {
             this.indice = indice;
             this.labelList = new ArrayList<>();
             this.cmd = cmd;
@@ -405,7 +406,7 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
 
         public static final List<CommandManager> commandManagerList = new ArrayList<>();
 
-        public static void register(boolean useFilePlugin, JavaPlugin plugin, @Nonnull CommandManager... commandManagers) {
+        public static void register(boolean useFilePlugin, JavaPlugin plugin, @NotNull CommandManager... commandManagers) {
             if(useFilePlugin) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     for (CommandManager cmd : commandManagers) {
@@ -460,12 +461,9 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
                 Object craftServer = craftServerClass.cast(Bukkit.getServer());
                 Object simpleCommandMap = craftServer.getClass().getMethod("getCommandMap").invoke(craftServer);
                 return ((SimpleCommandMap) simpleCommandMap);
-            } catch (IllegalAccessException | ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+            } catch (IllegalAccessException | ClassNotFoundException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                ThirstBar.getInstance().getLogger().severe(e.getMessage());
             }
             return null;
         }
@@ -480,7 +478,7 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
                 objectField.setAccessible(false);
                 return result;
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
+                ThirstBar.getInstance().getLogger().severe(e.getMessage());
             }
             return null;
         }

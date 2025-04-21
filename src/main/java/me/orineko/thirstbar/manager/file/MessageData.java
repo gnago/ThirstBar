@@ -4,9 +4,8 @@ import me.orineko.pluginspigottools.FileManager;
 import me.orineko.pluginspigottools.MethodDefault;
 import me.orineko.thirstbar.ThirstBar;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -98,71 +97,71 @@ public class MessageData {
         return file;
     }
 
-    public static String PLAYER_REFRESH_OTHER(@Nonnull String player) {
+    public static String PLAYER_REFRESH_OTHER(@NotNull String player) {
         return PLAYER_REFRESH_OTHER.replace("<player>", player);
     }
 
-    public static String PLAYER_SET(@Nonnull String value) {
+    public static String PLAYER_SET(@NotNull String value) {
         return PLAYER_SET.replace("<value>", value);
     }
 
-    public static String PLAYER_SET_OTHER(@Nonnull String player, @Nonnull String value) {
+    public static String PLAYER_SET_OTHER(@NotNull String player, @NotNull String value) {
         return PLAYER_SET_OTHER.replace("<player>", player).replace("<value>", value);
     }
 
-    public static String PLAYER_ADD(@Nonnull String value) {
+    public static String PLAYER_ADD(@NotNull String value) {
         return PLAYER_RESTORE.replace("<value>", value);
     }
 
-    public static String PLAYER_ADD_OTHER(@Nonnull String player, @Nonnull String value) {
+    public static String PLAYER_ADD_OTHER(@NotNull String player, @NotNull String value) {
         return PLAYER_RESTORE_OTHER.replace("<player>", player).replace("<value>", value);
     }
 
-    public static String PLAYER_REDUCE(@Nonnull String value) {
+    public static String PLAYER_REDUCE(@NotNull String value) {
         return PLAYER_REDUCE.replace("<value>", value);
     }
 
-    public static String PLAYER_REDUCE_OTHER(@Nonnull String player, @Nonnull String value) {
+    public static String PLAYER_REDUCE_OTHER(@NotNull String player, @NotNull String value) {
         return PLAYER_REDUCE_OTHER.replace("<player>", player).replace("<value>", value);
     }
 
-    public static String PLAYER_LOAD(@Nonnull String item) {
+    public static String PLAYER_LOAD(@NotNull String item) {
         return PLAYER_LOAD.replace("<item>", item);
     }
 
-    public static String PLAYER_LOAD_OTHER(@Nonnull String player, @Nonnull String item) {
+    public static String PLAYER_LOAD_OTHER(@NotNull String player, @NotNull String item) {
         return PLAYER_LOAD_OTHER.replace("<player>", player).replace("<item>", item);
     }
 
-    public static String PLAYER_DISABLE_OTHER(@Nonnull String player){
+    public static String PLAYER_DISABLE_OTHER(@NotNull String player){
         return PLAYER_DISABLE_OTHER.replace("<player>", player);
     }
 
-    public static String PLAYER_ENABLE_OTHER(@Nonnull String player){
+    public static String PLAYER_ENABLE_OTHER(@NotNull String player){
         return PLAYER_ENABLE_OTHER.replace("<player>", player);
     }
 
-    public static String PLAYER_MAX_SET(@Nonnull String value) {
+    public static String PLAYER_MAX_SET(@NotNull String value) {
         return PLAYER_MAX_SET.replace("<value>", value);
     }
 
-    public static String PLAYER_MAX_SET_OTHER(@Nonnull String player, @Nonnull String value) {
+    public static String PLAYER_MAX_SET_OTHER(@NotNull String player, @NotNull String value) {
         return PLAYER_MAX_SET_OTHER.replace("<player>", player).replace("<value>", value);
     }
 
-    public static String PLAYER_SET_STAGE(@Nonnull String stage) {
+    public static String PLAYER_SET_STAGE(@NotNull String stage) {
         return PLAYER_SET_STAGE.replace("<stage>", stage);
     }
 
-    public static String PLAYER_SET_STAGE_OTHER(@Nonnull String player, @Nonnull String stage) {
+    public static String PLAYER_SET_STAGE_OTHER(@NotNull String player, @NotNull String stage) {
         return PLAYER_SET_STAGE_OTHER.replace("<player>", player).replace("<stage>", stage);
     }
 
-    public static String PLAYER_SET_STAGE_ALL(@Nonnull String stage) {
+    public static String PLAYER_SET_STAGE_ALL(@NotNull String stage) {
         return PLAYER_SET_STAGE_ALL.replace("<stage>", stage);
     }
 
-    public static String DELAY_REFRESH(@Nonnull String time) {
+    public static String DELAY_REFRESH(@NotNull String time) {
         return DELAY_REFRESH.replace("<time>", time);
     }
 

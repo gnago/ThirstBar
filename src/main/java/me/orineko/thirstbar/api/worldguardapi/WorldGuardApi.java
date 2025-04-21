@@ -12,10 +12,11 @@ import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import com.sk89q.worldguard.session.SessionManager;
+import me.orineko.thirstbar.ThirstBar;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.stream.Collectors;
 
 public class WorldGuardApi {
@@ -40,7 +41,7 @@ public class WorldGuardApi {
                 stateFlag = (StateFlag) existing;
                 //integerFlag = (IntegerFlag) existing;
             } else {
-                ex.printStackTrace();
+                ThirstBar.getInstance().getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -70,7 +71,7 @@ public class WorldGuardApi {
         }
     }
 
-    public static double getReduceValueLocationPlayer(@Nonnull Player player){
+    public static double getReduceValueLocationPlayer(@NotNull Player player){
         try {
             Location location = BukkitAdapter.adapt(player.getLocation());
             RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();

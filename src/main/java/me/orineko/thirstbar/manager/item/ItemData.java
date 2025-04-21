@@ -3,9 +3,8 @@ package me.orineko.thirstbar.manager.item;
 import me.orineko.pluginspigottools.FileManager;
 import me.orineko.thirstbar.ThirstBar;
 import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemData {
 
@@ -16,7 +15,7 @@ public class ItemData {
     private boolean vanilla;
     private final FileManager file;
 
-    public ItemData(@Nonnull String name){
+    public ItemData(@NotNull String name){
         this.name = name;
         this.itemStack = null;
         this.value = 0;

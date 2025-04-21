@@ -9,30 +9,30 @@ import me.orineko.thirstbar.manager.file.ConfigData;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class ItemDataList extends DataList<ItemData> {
 
-    public ItemData addData(@Nonnull String name) {
+    public ItemData addData(@NotNull String name) {
         return super.addData(new ItemData(name), getData(name));
     }
 
-    public ItemData addData(@Nonnull String name, @Nonnull ItemStack itemStack){
+    public ItemData addData(@NotNull String name, @NotNull ItemStack itemStack){
         ItemData itemData = addData(name);
         itemData.setItemStack(itemStack);
         return itemData;
     }
 
     @Nullable
-    public ItemData getData(@Nonnull String name) {
+    public ItemData getData(@NotNull String name) {
         return super.getData(d -> d.getName().equals(name));
     }
 
     @Nullable
-    public ItemData getData(@Nonnull ItemStack itemStack) {
+    public ItemData getData(@NotNull ItemStack itemStack) {
         ItemData itemDataCustom = super.getData(d -> d.getItemStack() != null && d.getItemStack().isSimilar(itemStack));
         if(itemDataCustom != null) return itemDataCustom;
         return super.getData(d -> {
@@ -46,7 +46,7 @@ public class ItemDataList extends DataList<ItemData> {
         });
     }
 
-    public void removeData(@Nonnull String name){
+    public void removeData(@NotNull String name){
         super.getDataList().removeIf(d -> d.getName().equals(name));
     }
 

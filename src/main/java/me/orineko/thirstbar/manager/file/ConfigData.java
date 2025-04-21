@@ -4,8 +4,8 @@ import me.orineko.pluginspigottools.MethodDefault;
 import me.orineko.thirstbar.ThirstBar;
 import me.orineko.thirstbar.manager.ThirstBarMethod;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -128,8 +128,8 @@ public class ConfigData {
         return replace(ACTION_BAR_DISABLE_TITLE, value, max, reduce, time);
     }
 
-    private static void setResourceThirst(@Nonnull TypeResourceThirst typeResourceThirst, @Nonnull String thirstChar,
-                                          @Nonnull String thirstHalfLeftChar, @Nonnull String thirstHalfRightChar, @Nonnull String thirstEmptyChar){
+    private static void setResourceThirst(@NotNull TypeResourceThirst typeResourceThirst, @NotNull String thirstChar,
+                                          @NotNull String thirstHalfLeftChar, @NotNull String thirstHalfRightChar, @NotNull String thirstEmptyChar){
         int numberOfItems = 20;
         List<String> stringList = new ArrayList<>();
 
@@ -171,7 +171,7 @@ public class ConfigData {
                 .sorted(Comparator.comparing(ThirstCustomText::getValue)).collect(Collectors.toList()));
     }
 
-    public static String getThirstCustomText(@Nonnull TypeResourceThirst typeResourceThirst, final double value, double valueMax, double reduce, double time){
+    public static String getThirstCustomText(@NotNull TypeResourceThirst typeResourceThirst, final double value, double valueMax, double reduce, double time){
         List<ThirstCustomText> thirstCustomTextList = resourcePackThirstMap.getOrDefault(typeResourceThirst, null);
         if(thirstCustomTextList == null) return null;
         ThirstCustomText thirstCustomText = thirstCustomTextList.stream()
@@ -190,7 +190,7 @@ public class ConfigData {
         return (thirstCustomText != null) ? replace(thirstCustomText.getText(), value, valueMax, reduce, time) : "None";
     }
 
-    public static String replace(@Nonnull String text, double value, double max, double reduce, double time){
+    public static String replace(@NotNull String text, double value, double max, double reduce, double time){
         String timeChange;
         if(time == (long) time) timeChange = String.valueOf((long) time);
         else timeChange = String.format("%.2f", time).replaceAll("0*$", "").replaceAll("\\.$", "");
@@ -224,7 +224,7 @@ public class ConfigData {
         private boolean percent;
         private final String text;
 
-        public ThirstCustomText(@Nonnull String text){
+        public ThirstCustomText(@NotNull String text){
             String regex = "\\[(\\d+)%?]";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(text);
