@@ -7,9 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +22,12 @@ public abstract class ActionRegister {
     private int idRepeat;
     private final List<Condition> conditionList;
 
-    public ActionRegister(@NotNull String name){
+    public ActionRegister(@Nonnull String name){
         this.name = name;
         this.conditionList = new ArrayList<>();
     }
 
-    public ActionRegister(@NotNull ActionType actionType){
+    public ActionRegister(@Nonnull ActionType actionType){
         this(actionType.name());
     }
 
@@ -59,12 +59,12 @@ public abstract class ActionRegister {
         this.hideActionBar = hideActionBar;
     }
 
-    public boolean isExecuting(@NotNull Player player) {
+    public boolean isExecuting(@Nonnull Player player) {
         PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().addData(player.getName());
         return playerData.isExecutingAction(name);
     }
 
-    public abstract boolean checkCondition(@NotNull Player player);
+    public abstract boolean checkCondition(@Nonnull Player player);
 
     public void setIdRepeat(int idRepeat) {
         this.idRepeat = idRepeat;
@@ -85,7 +85,7 @@ public abstract class ActionRegister {
         }
     }
 
-    public ActionRegister loadFileData(@NotNull FileConfiguration file){
+    public ActionRegister loadFileData(@Nonnull FileConfiguration file){
         if(file.getConfigurationSection(name.toLowerCase()) != null) {
             setEnable(file.getBoolean(name.toLowerCase()+".enable", false));
             setMultiple(file.getDouble(name.toLowerCase()+".multiply", 0));
@@ -104,15 +104,15 @@ public abstract class ActionRegister {
         return this;
     }
 
-    public boolean checkCanExecute(@NotNull Player player){
+    public boolean checkCanExecute(@Nonnull Player player){
         return isEnable() && !isExecuting(player) && checkCondition(player);
     }
 
-    public boolean checkCanNotExecute(@NotNull Player player){
+    public boolean checkCanNotExecute(@Nonnull Player player){
         return isEnable() && isExecuting(player) && !checkCondition(player);
     }
 
-    public void executeAction(@NotNull Player player){
+    public void executeAction(@Nonnull Player player){
         PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().addData(player.getName());
         if(playerData.getActionRegisterList().stream().anyMatch(v -> v.getName().equals(this.getName()))) return;
         playerData.getActionRegisterList().add(this);
@@ -121,7 +121,7 @@ public abstract class ActionRegister {
         playerData.setActionExecutingStatus(name, true);
     }
 
-    public void disableAction(@NotNull Player player){
+    public void disableAction(@Nonnull Player player){
         PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().addData(player.getName());
         playerData.getActionRegisterList().remove(this);
         if(isHideActionBar()) playerData.setEnableActionBar(true);
@@ -130,7 +130,7 @@ public abstract class ActionRegister {
     }
 
     @Nullable
-    public Condition getCondition(@NotNull Player player) {
+    public Condition getCondition(@Nonnull Player player) {
         PlaceholderAPI placeholderAPI = ThirstBar.getInstance().getPlaceholderAPI();
         if(placeholderAPI == null) return null;
         return getConditionList().stream().filter(v -> {

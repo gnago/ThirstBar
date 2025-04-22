@@ -18,8 +18,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class ThirstBarMethod {
      * @param itemStack is item to give
      * @return true (false if full inventory)
      */
-    public static boolean sendItemToInv(@NotNull Player player, @NotNull ItemStack itemStack) {
+    public static boolean sendItemToInv(@Nonnull Player player, @Nonnull ItemStack itemStack) {
         PlayerInventory inventory = player.getInventory();
         if (inventory.firstEmpty() == -1) {
             player.getWorld().dropItemNaturally(player.getLocation().add(0, 0.5, 0), itemStack);
@@ -48,7 +48,7 @@ public class ThirstBarMethod {
         return true;
     }
 
-    public static PotionEffect getPotionEffect(@NotNull String text) {
+    public static PotionEffect getPotionEffect(@Nonnull String text) {
         String[] arr = text.split(":");
         if (arr.length == 0) return null;
         String effString = arr[0].trim();
@@ -63,7 +63,7 @@ public class ThirstBarMethod {
         return format.format(value);
     }
 
-    public static void disableGameMode(@NotNull Player player){
+    public static void disableGameMode(@Nonnull Player player){
         GameMode gameMode = player.getGameMode();
         PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().getData(player.getName());
         if(playerData == null) return;
@@ -76,7 +76,7 @@ public class ThirstBarMethod {
         }
     }
 
-    public static void executeAction(@NotNull Player player, @NotNull List<String> textList, boolean stageConfig) {
+    public static void executeAction(@Nonnull Player player, @Nonnull List<String> textList, boolean stageConfig) {
         List<String> titleMain = new ArrayList<>();
         List<String> titleSub = new ArrayList<>();
         textList.forEach(text -> {
@@ -88,7 +88,7 @@ public class ThirstBarMethod {
             switch (key) {
                 case "title":
                     titleMain.add(value);
-                    if (!titleSub.isEmpty()) {
+                    if (titleSub.size() > 0) {
                         String main = titleMain.get(0);
                         String sub = titleSub.get(0);
                         if (main == null || sub == null) return;
@@ -110,7 +110,7 @@ public class ThirstBarMethod {
                     break;
                 case "subtitle":
                     titleSub.add(value);
-                    if (!titleMain.isEmpty()) {
+                    if (titleMain.size() > 0) {
                         String main = titleMain.get(0);
                         String sub = titleSub.get(0);
                         if (main == null || sub == null) return;
@@ -145,8 +145,8 @@ public class ThirstBarMethod {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), value.replace("<player>", player.getName()));
                     break;
             }
-            String titleMainRemain = (!titleMain.isEmpty()) ? titleMain.get(0) : null;
-            String titleSubRemain = (!titleSub.isEmpty()) ? titleSub.get(0) : null;
+            String titleMainRemain = (titleMain.size() > 0) ? titleMain.get(0) : null;
+            String titleSubRemain = (titleSub.size() > 0) ? titleSub.get(0) : null;
             int versionNumber = Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split("\\.")[1]);
             if(versionNumber <= 19) {
                 if (titleMainRemain != null) Titles.sendTitle(player, titleMainRemain, "");
@@ -157,7 +157,7 @@ public class ThirstBarMethod {
         });
     }
 
-    public static boolean checkSightIsWater(@NotNull Player player, boolean checkIfClean){
+    public static boolean checkSightIsWater(@Nonnull Player player, boolean checkIfClean){
         Location locOrigin = player.getLocation();
         Location loc = player.getLocation().clone().add(0, 1.5, 0);
         Vector vector = player.getLocation().getDirection();
@@ -192,7 +192,8 @@ public class ThirstBarMethod {
             Location belowBlock = block.getLocation();
             belowBlock.subtract(0, 1, 0);
             Block blockBelow = belowBlock.getBlock();
-            return (blockBelow.getType().name().contains("FIRE") && !blockBelow.getType().name().contains("FIRE_CORAL")) || blockBelow.getType().name().contains("LAVA");
+            if ((blockBelow.getType().name().contains("FIRE") && !blockBelow.getType().name().contains("FIRE_CORAL")) || blockBelow.getType().name().contains("LAVA"))
+                return true;
         }
         return false;
     }

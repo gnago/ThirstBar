@@ -3,9 +3,9 @@ package me.orineko.thirstbar.manager.action;
 import me.orineko.thirstbar.ThirstBar;
 import me.orineko.thirstbar.manager.action.data.*;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +39,12 @@ public class ActionManager {
     }
 
     @Nullable
-    public ActionRegister getActionRegister(@NotNull String name){
+    public ActionRegister getActionRegister(@Nonnull String name){
         return actionRegisterList.stream().filter(v -> v.getName().equals(name.toUpperCase())).findAny().orElse(null);
     }
 
     @Nullable
-    public ActionRegister getActionRegister(@NotNull ActionType actionType){
+    public ActionRegister getActionRegister(@Nonnull ActionType actionType){
         return getActionRegister(actionType.name());
     }
 

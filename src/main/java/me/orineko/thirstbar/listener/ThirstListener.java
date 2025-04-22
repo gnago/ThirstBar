@@ -26,8 +26,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class ThirstListener implements Listener {
@@ -91,7 +91,7 @@ public class ThirstListener implements Listener {
         PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().getData(player.getName());
         if (playerData == null) return;
         if (ConfigData.DISABLED_WORLDS.stream().noneMatch(w ->
-                playerData.getPlayer() != null && playerData.getPlayer().getWorld().getName().trim().equalsIgnoreCase(w.trim()))) // check if player is in disabled world
+                playerData.getPlayer().getWorld().getName().trim().equalsIgnoreCase(w.trim()))) // check if player is in disabled world
         {
             GameMode gameMode = e.getNewGameMode();
             List<String> gamemodeList = ConfigData.DISABLED_GAMEMODE;
@@ -226,8 +226,9 @@ public class ThirstListener implements Listener {
         PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().addData(player.getName());
 
         if (!delayMoveMap.contains(player.getUniqueId())) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(ThirstBar.getInstance(), () ->
-                    delayMoveMap.remove(player.getUniqueId()), 20);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(ThirstBar.getInstance(), () -> {
+                delayMoveMap.remove(player.getUniqueId());
+            }, 20);
             delayMoveMap.add(player.getUniqueId());
 
             if (ThirstBar.getInstance().isWorldGuardApiEnable()) {
@@ -335,7 +336,7 @@ public class ThirstListener implements Listener {
             if (stageRain.isEnable()) {
                 if (!delayClickMap.contains(player.getUniqueId())) {
                     Location plrLoc = player.getLocation();
-                    if (player.getWorld().hasStorm() && player.getWorld().getHumidity(plrLoc.getBlockX(), plrLoc.getBlockY(), plrLoc.getBlockZ()) > 0) {
+                    if (player.getWorld().hasStorm() && player.getWorld().getTemperature(plrLoc.getBlockX(), plrLoc.getBlockY(), plrLoc.getBlockZ()) <= 0.95) {
                         boolean check = false;
                         for (int i = player.getLocation().getBlockY() + 1; i < 320; i++) {
                             Block block = player.getWorld().getBlockAt(player.getLocation().getBlockX(), i, player.getLocation().getBlockZ());
@@ -524,7 +525,7 @@ public class ThirstListener implements Listener {
         if()
     }*/
 
-    private boolean checkFoodHaveEffect(@NotNull ItemStack itemStack) {
+    private boolean checkFoodHaveEffect(@Nonnull ItemStack itemStack) {
         List<String> list = Arrays.asList("GOLDEN_APPLE", "ENCHANTED_GOLDEN_APPLE",
                 "PUFFERFISH", "MILK_BUCKET", "CHORUS_FRUIT", "POISONOUS_POTATO");
         for (String value : list) {

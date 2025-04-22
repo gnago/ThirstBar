@@ -1,7 +1,8 @@
 package me.orineko.thirstbar.manager.player;
 
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 public interface PlayerThirstyDisplay {
 
@@ -10,6 +11,6 @@ public interface PlayerThirstyDisplay {
     void updateFood(Player player);
     void updateActionBar(Player player);
     void updateAll(Player player);
-    void setDisplayBossBar(boolean bool, @NotNull Player player);
+    void setDisplayBossBar(boolean bool, @Nonnull Player player);
 
 }

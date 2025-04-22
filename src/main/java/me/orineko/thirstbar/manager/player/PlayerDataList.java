@@ -8,16 +8,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
 public class PlayerDataList extends DataList<PlayerData> {
 
-    public PlayerData addData(@NotNull String name) {
+    public PlayerData addData(@Nonnull String name) {
         PlayerData playerData = getData(name);
         if (playerData != null) return playerData;
         playerData = new PlayerData(name);
@@ -25,12 +25,12 @@ public class PlayerDataList extends DataList<PlayerData> {
         return playerData;
     }
 
-    public PlayerData addData(@NotNull Player player) {
+    public PlayerData addData(@Nonnull Player player) {
         return addData(player.getName());
     }
 
     @Nullable
-    public PlayerData getData(@NotNull String name) {
+    public PlayerData getData(@Nonnull String name) {
         return super.getData(d -> d.getName().equals(name));
     }
 
@@ -50,7 +50,9 @@ public class PlayerDataList extends DataList<PlayerData> {
             Player player = playerData.getPlayer();
             if (player != null){
                 playerData.disableStage(player, null);
-                player.getActivePotionEffects().forEach(v -> player.removePotionEffect(v.getType()));
+                player.getActivePotionEffects().forEach(v -> {
+                    player.removePotionEffect(v.getType());
+                });
             }
             playerData.getBossBar().removeAll();
         });
