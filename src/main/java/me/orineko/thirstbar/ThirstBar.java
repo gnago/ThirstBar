@@ -98,7 +98,8 @@ public final class ThirstBar extends JavaPlugin {
             placeholderAPI = new PlaceholderAPI();
             new ThirstBarExpansion().register();
         }
-        checkForUpdate();
+        //todo if merged back into main repository, uncomment this
+        //checkForUpdate();
 
         ItemStack bottle = new ItemStack(Material.POTION, 1);
         ItemMeta meta = bottle.getItemMeta();
