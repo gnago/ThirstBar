@@ -90,7 +90,7 @@ public class ThirstListener implements Listener {
         Player player = e.getPlayer();
         PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().getData(player.getName());
         if (playerData == null) return;
-        if (ConfigData.DISABLED_WORLDS.stream().noneMatch(w ->
+        if (ConfigData.DISABLED_WORLDS.stream().noneMatch(w -> playerData.getPlayer() != null &&
                 playerData.getPlayer().getWorld().getName().trim().equalsIgnoreCase(w.trim()))) // check if player is in disabled world
         {
             GameMode gameMode = e.getNewGameMode();
@@ -226,9 +226,8 @@ public class ThirstListener implements Listener {
         PlayerData playerData = ThirstBar.getInstance().getPlayerDataList().addData(player.getName());
 
         if (!delayMoveMap.contains(player.getUniqueId())) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(ThirstBar.getInstance(), () -> {
-                delayMoveMap.remove(player.getUniqueId());
-            }, 20);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(ThirstBar.getInstance(), () ->
+                delayMoveMap.remove(player.getUniqueId()), 20);
             delayMoveMap.add(player.getUniqueId());
 
             if (ThirstBar.getInstance().isWorldGuardApiEnable()) {
@@ -336,7 +335,7 @@ public class ThirstListener implements Listener {
             if (stageRain.isEnable()) {
                 if (!delayClickMap.contains(player.getUniqueId())) {
                     Location plrLoc = player.getLocation();
-                    if (player.getWorld().hasStorm() && player.getWorld().getTemperature(plrLoc.getBlockX(), plrLoc.getBlockY(), plrLoc.getBlockZ()) <= 0.95) {
+                    if (player.getWorld().hasStorm() && player.getWorld().getHumidity(plrLoc.getBlockX(), plrLoc.getBlockY(), plrLoc.getBlockZ()) > 0) {
                         boolean check = false;
                         for (int i = player.getLocation().getBlockY() + 1; i < 320; i++) {
                             Block block = player.getWorld().getBlockAt(player.getLocation().getBlockX(), i, player.getLocation().getBlockZ());

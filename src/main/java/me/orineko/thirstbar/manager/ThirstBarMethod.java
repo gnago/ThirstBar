@@ -88,7 +88,7 @@ public class ThirstBarMethod {
             switch (key) {
                 case "title":
                     titleMain.add(value);
-                    if (titleSub.size() > 0) {
+                    if (!titleSub.isEmpty()) {
                         String main = titleMain.get(0);
                         String sub = titleSub.get(0);
                         if (main == null || sub == null) return;
@@ -110,7 +110,7 @@ public class ThirstBarMethod {
                     break;
                 case "subtitle":
                     titleSub.add(value);
-                    if (titleMain.size() > 0) {
+                    if (!titleMain.isEmpty()) {
                         String main = titleMain.get(0);
                         String sub = titleSub.get(0);
                         if (main == null || sub == null) return;
@@ -145,8 +145,8 @@ public class ThirstBarMethod {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), value.replace("<player>", player.getName()));
                     break;
             }
-            String titleMainRemain = (titleMain.size() > 0) ? titleMain.get(0) : null;
-            String titleSubRemain = (titleSub.size() > 0) ? titleSub.get(0) : null;
+            String titleMainRemain = (!titleMain.isEmpty()) ? titleMain.get(0) : null;
+            String titleSubRemain = (!titleSub.isEmpty()) ? titleSub.get(0) : null;
             int versionNumber = Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split("\\.")[1]);
             if(versionNumber <= 19) {
                 if (titleMainRemain != null) Titles.sendTitle(player, titleMainRemain, "");
@@ -189,11 +189,8 @@ public class ThirstBarMethod {
         {
             /*if (block.getType().equals(Material.BUBBLE_COLUMN))
                 return true;*/
-            Location belowBlock = block.getLocation();
-            belowBlock.subtract(0, 1, 0);
-            Block blockBelow = belowBlock.getBlock();
-            if ((blockBelow.getType().name().contains("FIRE") && !blockBelow.getType().name().contains("FIRE_CORAL")) || blockBelow.getType().name().contains("LAVA"))
-                return true;
+            Block blockBelow = block.getLocation().subtract(0, 1, 0).getBlock();
+            return (blockBelow.getType().name().contains("FIRE") && !blockBelow.getType().name().contains("FIRE_CORAL")) || blockBelow.getType().name().contains("LAVA");
         }
         return false;
     }

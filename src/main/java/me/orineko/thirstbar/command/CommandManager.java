@@ -160,7 +160,7 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
 
     private List<DataCommand> getDataCommandListInLength(@Nonnull String[] args) {
         return dataCommandList.stream().filter(d -> d.getLength() == args.length ||
-                        (d.getNameList().size() > 0 && args.length > 0 && d.getNameList().get(0).equalsIgnoreCase(args[0])) ||
+                        (!d.getNameList().isEmpty() && args.length > 0 && d.getNameList().get(0).equalsIgnoreCase(args[0])) ||
                 (d.getLength() < args.length && d.getNameList().isEmpty())
         ).collect(Collectors.toList());
     }
@@ -460,11 +460,8 @@ public abstract class CommandManager extends BukkitCommand implements CommandExe
                 Object craftServer = craftServerClass.cast(Bukkit.getServer());
                 Object simpleCommandMap = craftServer.getClass().getMethod("getCommandMap").invoke(craftServer);
                 return ((SimpleCommandMap) simpleCommandMap);
-            } catch (IllegalAccessException | ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException | ClassNotFoundException |
+                     InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();
             }
             return null;

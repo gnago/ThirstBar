@@ -34,7 +34,7 @@ public class ThirstBarExpansion extends PlaceholderExpansion {
         switch (identifier){
             case "stage":
                 List<Stage> stageList = playerData.getStageCurrentList();
-                return String.valueOf((stageList.size() > 0) ? stageList.get(stageList.size()-1) : "");
+                return String.valueOf((!stageList.isEmpty()) ? stageList.get(stageList.size()-1) : "");
             case "current_int":
                 return String.valueOf((int) playerData.getThirst());
             case "current_float":

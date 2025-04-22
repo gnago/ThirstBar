@@ -50,9 +50,7 @@ public class PlayerDataList extends DataList<PlayerData> {
             Player player = playerData.getPlayer();
             if (player != null){
                 playerData.disableStage(player, null);
-                player.getActivePotionEffects().forEach(v -> {
-                    player.removePotionEffect(v.getType());
-                });
+                player.getActivePotionEffects().forEach(v -> player.removePotionEffect(v.getType()));
             }
             playerData.getBossBar().removeAll();
         });
