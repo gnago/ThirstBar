@@ -14,11 +14,11 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.joml.RoundingMode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -477,7 +477,7 @@ public class PlayerData extends PlayerSetting implements PlayerThirstValue, Play
         ArmorStand armorStand = player.getWorld().spawn(location, ArmorStand.class);
         armorStand.setVisible(false);
         armorStand.setGravity(false);
-        armorStand.getAttribute(Attribute.BURNING_TIME).setBaseValue(0);
+        Objects.requireNonNull(armorStand.getAttribute(Attribute.BURNING_TIME)).setBaseValue(0);
         setArmorStandFrontPlayer(armorStand);
     }
 }

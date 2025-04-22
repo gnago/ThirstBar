@@ -112,7 +112,7 @@ public final class ThirstBar extends JavaPlugin {
         if(versionNumber < 16) {
             furnaceRecipe = new FurnaceRecipe(bottle, potionRawItem.getType());
         } else {
-            furnaceRecipe = new FurnaceRecipe(NamespacedKey.randomKey(), bottle, potionRawItem.getType(), ConfigData.CUSTOM_FURNACE_EXP, ConfigData.CUSTOM_FURNACE_COOKING_TIME);
+            furnaceRecipe = new FurnaceRecipe(new NamespacedKey(this, "thirstbar_boil_water"), bottle, potionRawItem.getType(), ConfigData.CUSTOM_FURNACE_EXP, ConfigData.CUSTOM_FURNACE_COOKING_TIME);
         }
         Bukkit.addRecipe(furnaceRecipe);
 
@@ -120,7 +120,7 @@ public final class ThirstBar extends JavaPlugin {
         {
             // Add Campfire recipe too!
             CampfireRecipe campfireRecipe;
-            campfireRecipe = new CampfireRecipe(NamespacedKey.randomKey(), bottle, potionRawItem.getType(), ConfigData.CUSTOM_CAMPFIRE_EXP, ConfigData.CUSTOM_CAMPFIRE_COOKING_TIME);
+            campfireRecipe = new CampfireRecipe(new NamespacedKey(this, "thirstbar_boil_water_from_campfire_cooking"), bottle, potionRawItem.getType(), ConfigData.CUSTOM_CAMPFIRE_EXP, ConfigData.CUSTOM_CAMPFIRE_COOKING_TIME);
             Bukkit.addRecipe(campfireRecipe);
         }
     }
